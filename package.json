@@ -1,0 +1,37 @@
+{
+    "name": "messabout",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.jsx",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "npm run dev",
+        "dev": "webpack -d && webpack-dev-server --content-base public/ --inline --hot --port 1234 --history-api-fallback",
+        "build": "webpack --mode production"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@fortawesome/fontawesome": "^1.1.8",
+        "@fortawesome/fontawesome-free-solid": "^5.0.13",
+        "es6-promise": "^4.2.4",
+        "firebase": "^5.0.4",
+        "react": "^16.2.0",
+        "react-dom": "^16.2.0",
+        "react-textarea-autosize": "^6.1.0",
+        "webpack-cli": "^2.0.10"
+    },
+    "devDependencies": {
+        "babel-core": "^6.26.0",
+        "babel-loader": "^7.1.4",
+        "babel-minify-webpack-plugin": "^0.3.1",
+        "babel-preset-es2015": "^6.24.1",
+        "babel-preset-react": "^6.24.1",
+        "css-loader": "^0.28.11",
+        "font-awesome": "^4.7.0",
+        "style-loader": "^0.20.3",
+        "uglifyjs-webpack-plugin": "^1.2.5",
+        "webpack": "^4.1.1",
+        "webpack-dev-server": "^3.1.0"
+    }
+}

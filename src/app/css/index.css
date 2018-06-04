@@ -1,0 +1,423 @@
+    * {
+        box-sizing: border-box;
+    }
+    
+    body {
+        font: 14px "Century Gothic", Futura, sans-serif;
+        background: #E3EEFF;
+        margin: 0;
+    }
+    
+    h2 {
+        margin: 0
+    }
+    
+    a:hover {
+        cursor: pointer;
+        color: #61DAF9;
+    }
+    
+    select {
+        display: block;
+        font-size: 18px;
+    }
+    
+    .hidden {
+        display: none;
+    }
+    
+    .flex {
+        display: flex;
+    }
+    
+    .flex-full {
+        flex: 1 0;
+    }
+    
+    .selected {
+        color: #61DAF9;
+    }
+    
+    .padding-left-xs {
+        padding-left: 8px;
+    }
+    
+    .text-right {
+        text-align: right;
+    }
+    
+    .left-and-right {
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .label-button-row {
+        display: flex;
+    }
+    
+    .label-button-row div:first-child {
+        flex-basis: 0;
+        flex-grow: 9;
+    }
+    
+    .label-button-row div:last-child {
+        flex-basis: 0;
+        flex-grow: 1;
+        text-align: right;
+    }
+    
+    .label-button-row div:last-child button {
+        margin-top: 42px;
+        padding: 4px;
+        font-size: 15px;
+        width: 29px;
+        margin-left: 2px;
+    }
+    
+    .recipe-button {
+        background: #E3EEFF;
+        background: white;
+        font-weight: bold;
+        padding: 8px;
+        border: 2px solid black;
+    }
+    
+    .recipe-button:hover {
+        cursor: pointer;
+        background: #636e72;
+        color: white;
+    }
+    
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        background: black;
+        align-items: center;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    
+    nav .nav-label {
+        display: none;
+    }
+    
+    nav .search-bar {
+        width: 100%;
+        font-size: 16px;
+        padding-left: 6px;
+    }
+    
+    nav ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        color: white;
+        display: flex;
+        flex: 1 0 auto;
+    }
+    
+    nav li {
+        padding: 4px 12px;
+        margin: 8px 0;
+    }
+    
+    nav .header-nav li:nth-child(2) {
+        flex: 1 0 100px;
+    }
+    
+    nav .header-nav {
+        display: none;
+    }
+    
+    nav .button-nav {
+        justify-content: space-between;
+    }
+    
+    .main-flex-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    .shopping-wrapper {
+        flex: 1 0 300px;
+    }
+    
+    .recipe-book-wrapper {
+        flex: 4 1 300px;
+    }
+    
+    #recipe-book-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    #shopping-list {
+        background: white;
+        margin: 12px;
+        box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
+        padding: 8px;
+    }
+    
+    #shopping-list .recipe-label {
+        margin-top: 0;
+        font-size: 16px;
+    }
+    
+    #shopping-list .recipe-input {
+        font-size: 14px;
+    }
+    
+    #shopping-list .left-and-right {
+        margin-top: 16px;
+    }
+    
+    #recipe-book {
+        display: block;
+    }
+    
+    #recipe-book-grid .recipe-item {
+        flex: 0 0 200px;
+        background: white;
+        margin: 12px;
+        box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
+        padding: 8px;
+    }
+    
+    #recipe-book-list .recipe-item {
+        display: block;
+        background: white;
+        margin: 12px;
+        box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
+        padding: 8px;
+    }
+    
+    .recipe-item h2 {
+        margin: 0;
+    }
+    
+    .recipe-container {
+        width: 90%;
+        margin: 24px auto;
+        background: white;
+        padding: 28px 32px;
+        box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
+    }
+    
+    .recipe-container h1 {
+        margin: 0;
+    }
+    
+    .recipe-label {
+        display: block;
+        font-size: 20px;
+        margin-top: 28px;
+    }
+    
+    .recipe-input {
+        border: 0;
+        border-bottom: 2px solid black;
+        width: 100%;
+        font: 16px "Century Gothic", Futura, sans-serif;
+    }
+    
+    .recipe-textarea {
+        font-size: 20px;
+        border: 0;
+        border-bottom: 2px solid black;
+        resize: none;
+        width: 100%;
+        font: 16px "Century Gothic", Futura, sans-serif;
+    }
+    
+    .recipe-input:focus,
+    .recipe-textarea:focus {
+        outline: 0;
+        border-bottom: 2px solid #87CEFA;
+    }
+    
+    #recipe-form .recipe-button {
+        margin-top: 4px;
+    }
+    
+    .recipe-item {
+        position: relative;
+    }
+    
+    .recipe-item .remove-recipe-item {
+        position: absolute;
+        right: 4px;
+    }
+    
+    #recipe-form .ingredient-flex {
+        display: flex;
+        justify-content: space-between;
+        font-size: 18px;
+        flex-wrap: wrap;
+    }
+    
+    #recipe-form .ingredient-flex div:first-child {
+        flex: 1 1 200px;
+        padding-right: 8px;
+    }
+    
+    #recipe-form .ingredient-flex div:nth-child(2) {
+        flex: 0 0 80px;
+        padding-right: 8px;
+    }
+    
+    #recipe-form .ingredient-flex div:nth-child(3) {
+        flex: 0 0 auto;
+        padding-right: 8px;
+    }
+    
+    #recipe-form .ingredient-flex div:last-child {
+        flex: 0 0 auto;
+    }
+    
+    #recipe-form .ingredient-flex .recipe-button {
+        margin-top: 28px;
+        padding: 4px;
+        font-size: 15px;
+        width: 29px;
+    }
+    
+    #recipe-form .ingredient-flex label {
+        font-size: 16px;
+        margin-top: 8px;
+    }
+    
+    #recipe-form .recipe-save-button {
+        margin-top: 8px;
+        margin-top: 30px;
+    }
+    
+    #recipe-form .recipe-input,
+    #recipe-form .recipe-textarea,
+    {
+        font-size: 12x;
+    }
+    
+    #recipe-form .recipe-label {
+        font-size: 16px;
+    }
+    
+    #view-recipe {
+        position: relative;
+    }
+    
+    #view-recipe .edit-recipe {
+        position: absolute;
+        right: 18px;
+        top: 18px;
+    }
+    
+    #logIn {
+        background: white;
+        width: 90%;
+        margin: 12px auto;
+        box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
+        padding: 16px 29px;
+    }
+    
+    #logIn .recipe-button {
+        margin-top: 8px;
+    }
+    
+    #logIn div:first-child .recipe-label {
+        margin-top: 0;
+    }
+    
+    .max-600 {
+        display: none
+    }
+    
+    .min-600 {
+        display: none
+    }
+    
+    .min-768 {
+        display: none
+    }
+    
+    .min-992 {
+        display: none
+    }
+    
+    .min-1200 {
+        display: none
+    }
+    /* Extra small devices (phones, 600px and down) */
+    
+    @media only screen and (max-width: 600px) {
+        .max-600 {
+            display: block
+        }
+    }
+    /* Small devices (portrait tablets and large phones, 600px and up) */
+    
+    @media only screen and (min-width: 600px) {
+        .min-600 {
+            display: block
+        }
+        nav {
+            font-size: 14px
+        }
+        nav li {
+            padding: 4px 6px;
+        }
+        nav .nav-label {
+            display: inline-block;
+        }
+        nav .header-nav {
+            display: flex;
+            flex: 3 0 auto;
+        }
+        nav .button-nav {
+            justify-content: flex-end;
+            flex: 1 0 auto;
+        }
+        nav .search-nav {
+            display: none;
+        }
+        nav .button-nav li:first-child,
+        nav .button-nav li:nth-child(2) {
+            display: none;
+        }
+        #logIn {
+            background: white;
+            width: 400px;
+            margin: 12px auto;
+            box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
+            padding: 24px 52px;
+        }
+        .recipe-container {
+            width: 600px;
+            padding: 36px 72px;
+        }
+    }
+    /* Medium devices (landscape tablets, 768px and up) */
+    
+    @media only screen and (min-width: 768px) {
+        .min-768 {
+            display: block
+        }
+        nav {
+            font-size: 16px;
+        }
+    }
+    /* Large devices (laptops/desktops, 992px and up) */
+    
+    @media only screen and (min-width: 992px) {
+        .min-992 {
+            display: block
+        }
+    }
+    /* Extra large devices (large laptops and desktops, 1200px and up) */
+    
+    @media only screen and (min-width: 1200px) {
+        .min-1200 {
+            display: block
+        }
+    }
