@@ -45,6 +45,8 @@ class RecipePage extends React.Component {
     this.newShoppingList = this.newShoppingList.bind(this);
     this.deleteShoppingListIngredient = this.deleteShoppingListIngredient.bind(this);
     this.deleteShoppingListExtra = this.deleteShoppingListExtra.bind(this);
+    this.crossOutShoppingListIngredient = this.crossOutShoppingListIngredient.bind(this);
+    this.crossOutShoppingListExtra = this.crossOutShoppingListExtra.bind(this);
   }
   showLoading() {
     this.setState({
@@ -113,12 +115,12 @@ class RecipePage extends React.Component {
   saveShoppingList() {
     const shoppingList = this.state.shoppingList;
     if (shoppingList.id) {
-      this.showLoading();
+      // this.showLoading();
       firestore.collection('ShoppingList').doc(shoppingList.id).set(shoppingList)
         .then(() => {
-          console.log("ShoppingListSaved saved successfully");
-          this.getShoppingList();
-          this.hideLoading();
+          // console.log("ShoppingListSaved saved successfully");
+          // this.getShoppingList();
+          // this.hideLoading();
         })
         .catch(error => console.log("Error adding document: ", error));
     }
@@ -143,12 +145,39 @@ class RecipePage extends React.Component {
     }
     this.setState({ shoppingList: shoppingList });
   }
+  crossOutShoppingListIngredient(index) {
+    var shoppingList = Object.assign({}, this.state.shoppingList);
+    if (index > -1) {
+      shoppingList.shoppingListIngredients[parseInt(index)].crossedOut = shoppingList.shoppingListIngredients[parseInt(index)].crossedOut ? false : true;
+    }
+
+    this.setState(
+      { shoppingList: shoppingList },
+      () => {
+        this.saveShoppingList();
+      });
+  }
   deleteShoppingListExtra(index) {
     var shoppingList = Object.assign({}, this.state.shoppingList);
     if (index > -1) {
       shoppingList.shoppingListExtras.splice(index, 1);
     }
-    this.setState({ shoppingList: shoppingList });
+    this.setState({
+      shoppingList: shoppingList
+    }, () => {
+      this.saveShoppingList();
+    });
+  }
+  crossOutShoppingListExtra(index) {
+    var shoppingList = Object.assign({}, this.state.shoppingList);
+    if (index > -1) {
+      shoppingList.shoppingListExtras[parseInt(index)].crossedOut = shoppingList.shoppingListExtras[parseInt(index)].crossedOut ? false : true;
+    }
+    this.setState(
+      { shoppingList: shoppingList },
+      () => {
+        this.saveShoppingList();
+      });
   }
   createRecipe() {
     this.setState((prevState) => ({
@@ -266,6 +295,8 @@ class RecipePage extends React.Component {
       shoppingList.shoppingListExtras = shoppingListExtras;
       this.setState({
         shoppingList: shoppingList
+      }, () => {
+        this.saveShoppingList();
       });
     } else {
       return;
@@ -342,10 +373,12 @@ class RecipePage extends React.Component {
                 <ShoppingList shoppingList={this.state.shoppingList.shoppingListIngredients}
                   shoppingListExtras={this.state.shoppingList.shoppingListExtras}
                   onClick={this.addShoppingListExtras}
-                  onSave={this.saveShoppingList}
                   deleteShoppingListIngredient={this.deleteShoppingListIngredient}
                   deleteShoppingListExtra={this.deleteShoppingListExtra}
-                  createNewShoppingList={this.newShoppingList} />
+                  crossOutShoppingListIngredient={this.crossOutShoppingListIngredient}
+                  crossOutShoppingListExtra={this.crossOutShoppingListExtra}
+                  createNewShoppingList={this.newShoppingList}
+                />
               </div>
               <div className="recipe-book-wrapper">
                 {content}

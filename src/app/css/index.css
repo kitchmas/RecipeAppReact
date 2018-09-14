@@ -22,6 +22,10 @@
         font-size: 18px;
     }
     
+    .line-through {
+        text-decoration: line-through;
+    }
+    
     .hidden {
         display: none;
     }
@@ -160,17 +164,39 @@
         padding: 8px;
     }
     
+    #shopping-list ul {
+        padding-left: 12px;
+        list-style: none;
+        font-weight: bold;
+        font-size: 16px;
+        margin-top: 6px;
+    }
+    
+    #shopping-list .recipe-item {
+        margin-bottom: 6px;
+    }
+    
+    #shopping-list .recipe-item:hover {
+        cursor: pointer;
+    }
+    
     #shopping-list .recipe-label {
         margin-top: 0;
         font-size: 16px;
     }
     
     #shopping-list .recipe-input {
-        font-size: 14px;
+        font-size: 16px;
+        font-weight: bold;
+        padding-left: 2px;
     }
     
     #shopping-list .left-and-right {
-        margin-top: 16px;
+        margin-top: 4px;
+    }
+    
+    #shopping-list .label-button-row div:last-child button {
+        margin-top: -4px;
     }
     
     #recipe-book {

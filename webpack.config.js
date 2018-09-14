@@ -10,7 +10,7 @@ module.exports = {
         publicPath: '/'
     },
     mode: 'production',
-    // devtool: "#eval-source-map",
+    devtool: "#eval-source-map",
     module: {
         rules: [{
                 test: /\.jsx?$/,
