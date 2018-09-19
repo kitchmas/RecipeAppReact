@@ -21,14 +21,15 @@ class RecipeNav extends React.Component {
                 gridLayout: 3,
                 listLayout: 4
             },
-            selectedButton: 3,
+            selectedButton: null,
             showSearchBar: false
         }
         this.createRecipeClicked = this.createRecipeClicked.bind(this);
         this.createShoppingListClicked = this.createShoppingListClicked.bind(this);
-        this.gridLayoutClicked = this.gridLayoutClicked.bind(this);
-        this.listLayoutClicked = this.listLayoutClicked.bind(this);
+        this.homeClicked = this.homeClicked.bind(this);
         this.searchButtonClicked = this.searchButtonClicked.bind(this);
+        this.logOutClicked = this.logOutClicked.bind(this);
+
 
     }
     createRecipeClicked() {
@@ -38,19 +39,17 @@ class RecipeNav extends React.Component {
         this.props.createRecipe();
     }
     createShoppingListClicked() {
+        this.setState((prev) => ({
+            selectedButton: prev.buttons.createShoppingList
+        }));
         this.props.createShoppingList();
+        debugger;
     }
-    gridLayoutClicked() {
+    homeClicked() {
         this.setState((prev) => ({
-            selectedButton: prev.buttons.gridLayout
+            selectedButton: prev.buttons.null
         }));
-        this.props.gridLayout();
-    }
-    listLayoutClicked() {
-        this.setState((prev) => ({
-            selectedButton: prev.buttons.listLayout
-        }));
-        this.props.listLayout();
+        this.props.homeClicked();
     }
     searchButtonClicked() {
         this.setState((prev) => ({
@@ -58,12 +57,15 @@ class RecipeNav extends React.Component {
         }
         ));
     }
+    logOutClicked() {
+        this.props.logOutClicked();
+    }
     render() {
         return (
             <nav>
                 <ul className="header-nav" >
                     <li>
-                        <a onClick={this.gridLayoutClicked}>
+                        <a onClick={this.homeClicked}>
                             Recipe App
                         </a>
                     </li>
@@ -78,7 +80,7 @@ class RecipeNav extends React.Component {
                 </ul>
                 <ul className="button-nav">
                     <li>
-                        <a onClick={this.gridLayoutClicked}>
+                        <a onClick={this.homeClicked}>
                             RA
                         </a>
                     </li>
@@ -96,7 +98,7 @@ class RecipeNav extends React.Component {
                         </a>
                     </li>
                     <li>
-                        <a className={this.props.creatingShoppingList ? 'selected' : ''}
+                        <a className={this.state.selectedButton === this.state.buttons.createShoppingList ? 'selected' : ''}
                             onClick={this.createShoppingListClicked}>
                             <i className="fas fa-shopping-basket"></i>
                             <span className="padding-left-xs nav-label">Shopping list</span>
@@ -104,16 +106,8 @@ class RecipeNav extends React.Component {
                     </li>
                     <li>
                         <a
-                            className={this.state.selectedButton === this.state.buttons.gridLayout ? 'selected' : ''}
-                            onClick={this.gridLayoutClicked}>
-                            <i className="fas fa-th"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            className={this.state.selectedButton === this.state.buttons.listLayout ? 'selected' : ''}
-                            onClick={this.listLayoutClicked}>
-                            <i className="fas fa-list" />
+                            onClick={this.logOutClicked}>
+                            <span className="padding-left-xs nav-label">Log out</span>
                         </a>
                     </li>
                 </ul>

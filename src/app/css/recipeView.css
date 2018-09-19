@@ -1,0 +1,119 @@
+  .item-detail {
+      display: flex;
+      flex-direction: column;
+      width: 80%;
+      max-width: 600px;
+      margin: 0 auto;
+      background: #ffffff;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+      margin-top: 20px;
+  }
+  
+  .item-detail .heading-menu-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      margin: 12px 0 12px 20px;
+  }
+  
+  .main-content {
+      padding: 0 20px 10px 20px;
+  }
+  
+  .item-detail .heading-menu-row h2 {
+      padding: 0;
+      margin: 0;
+      font-weight: 500;
+  }
+  
+  .item-detail .heading-menu-row .settings {
+      position: absolute;
+      top: 40px;
+      right: 0;
+      height: 150px;
+      width: 150px;
+      background: #ffffff;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  }
+  
+  .item-detail .heading-menu-row .settings {
+      display: none;
+      position: absolute;
+      top: 40px;
+      right: 0;
+      height: 150px;
+      width: 150px;
+      background: #ffffff;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  }
+  
+  .item-detail .heading-menu-row .list-menu-button:focus .settings {
+      display: block;
+  }
+  
+  .item-detail .heading-menu-row .list-menu-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 34px;
+      color: #57606f;
+      height: 36px;
+      width: 36px;
+      background: white;
+      border: white;
+      padding: 0;
+  }
+  
+  .item-detail .heading-menu-row .list-menu-button:hover {
+      cursor: pointer;
+      color: black;
+  }
+  
+  .item-detail .heading-menu-row .list-menu-button:focus {
+      outline: none;
+  }
+  
+  .item-detail .description-block {
+      margin-bottom: 20px;
+      border-bottom: 2px solid #70a1ff;
+  }
+  
+  .item-detail .description-block p {
+      margin: 0;
+      margin-bottom: 22px;
+  }
+  
+  .item-detail .method-wrapper {
+      display: flex;
+  }
+  
+  .item-detail .method-wrapper .method {
+      flex: 3;
+  }
+  
+  .item-detail .list-items {
+      flex: 1;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      min-width: 160px;
+  }
+  
+  .item-detail .list-items li {
+      display: flex;
+      align-items: center;
+      padding: 4px 0;
+  }
+  
+  .item-detail .list-items .circle {
+      height: 10px;
+      width: 10px;
+      border-radius: 100px;
+      background: #70a1ff;
+  }
+  
+  .item-detail .list-items .item {
+      font-size: 16px;
+      margin-left: 6px;
+  }

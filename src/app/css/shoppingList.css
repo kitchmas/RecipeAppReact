@@ -1,0 +1,164 @@
+        .list-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+            width: 80%;
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+            margin-top: 20px;
+        }
+        
+        .list-wrapper .heading-menu-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 4px;
+            position: relative;
+        }
+        
+        .list-wrapper .heading-menu-row .settings {
+            position: absolute;
+            top: 40px;
+            right: 0;
+            height: 150px;
+            width: 150px;
+            background: #ffffff;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+        }
+        
+        .list-wrapper .heading-menu-row .settings {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            height: 150px;
+            width: 150px;
+            background: #ffffff;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+        }
+        
+        .list-wrapper .heading-menu-row .list-menu-button:focus .settings {
+            display: block;
+        }
+        
+        .list-wrapper .heading-menu-row h2 {
+            margin: 0;
+            padding-left: 12px;
+        }
+        
+        .list-wrapper .heading-menu-row .list-menu-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 34px;
+            color: #57606f;
+            height: 36px;
+            width: 36px;
+            background: white;
+            border: white;
+            padding: 0;
+        }
+        
+        .list-wrapper .heading-menu-row .list-menu-button:hover {
+            cursor: pointer;
+            color: black;
+        }
+        
+        .list-wrapper .heading-menu-row .list-menu-button:focus {
+            outline: none;
+        }
+        
+        .list-wrapper .list-items {
+            flex: 1;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            overflow: auto;
+            overflow-x: hidden;
+        }
+        
+        .list-wrapper .list-items li {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            ;
+        }
+        
+        .list-wrapper .list-items li:hover,
+        .list-wrapper .list-items li:active {
+            background: #dfe4ea;
+        }
+        
+        .list-wrapper .list-items li .remove-item,
+        .list-wrapper .list-items li .remove-item {
+            display: none;
+            font-weight: bold;
+        }
+        
+        .list-wrapper .list-items li:hover .remove-item,
+        .list-wrapper .list-items li:active .remove-item {
+            display: block;
+        }
+        
+        .list-wrapper .list-items .circle {
+            height: 20px;
+            width: 20px;
+            border-radius: 100px;
+            background: #70a1ff;
+        }
+        
+        .list-wrapper .list-items .item {
+            flex: 9;
+            font-size: 18px;
+            margin-left: 20px;
+        }
+        
+        .list-wrapper .item-input-control {
+            display: flex;
+            justify-content: space-around;
+        }
+        
+        .list-wrapper .item-input-control input {
+            flex: 9;
+            font-size: 18px;
+            padding-left: 8px;
+            border: 0;
+        }
+        
+        .list-wrapper .item-input-control input:focus {
+            outline: none;
+            border: 2px solid #4d90fe;
+        }
+        
+        .list-wrapper .item-input-control button {
+            font-size: 30px;
+            width: 40px;
+            background: white;
+            border: white;
+            padding: 0;
+        }
+        
+        .list-wrapper .item-input-control button:hover {
+            outline: none;
+            background: #dfe4ea;
+        }
+        
+        .list-wrapper .item-input-control button:focus {
+            outline: none;
+        }
+        
+        .shadow-top {
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2)
+        }
+        
+        .shadow-bottom {
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        @media only screen and (max-width: 768px) {
+            .list-wrapper {
+                width: 90%;
+            }
+        }

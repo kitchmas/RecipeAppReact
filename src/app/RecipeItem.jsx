@@ -7,9 +7,11 @@ class RecipeItem extends React.Component {
   }
   render() {
     return (
-      <div onClick={e => this.props.onClick(this.props.recipe.id)} className="recipe-item">
-        <h2>{this.props.recipe.name}</h2>
-        <div>{this.props.recipe.description}</div>
+      <div onClick={e => this.props.onClick(this.props.recipe.id)} class="item white-box">
+        <h2 class="item-heading">{this.props.recipe.name}</h2>
+        <p class="item-short-description">
+          {this.props.recipe.description}
+        </p>
       </div>
     )
   }

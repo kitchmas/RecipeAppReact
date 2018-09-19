@@ -8,6 +8,7 @@ import { RecipeItem } from './RecipeItem.jsx';
 import { RecipeForm } from './RecipeForm.jsx';
 import { RecipeView } from './RecipeView.jsx';
 import { RecipeNav } from './nav.jsx';
+import { RecipeBook } from './RecipeBook.jsx';
 import { ShoppingList } from './ShoppingList.jsx';
 import { Login } from './login.jsx';
 import Textarea from "react-textarea-autosize";
@@ -19,7 +20,9 @@ class RecipePage extends React.Component {
       isLoading: true,
       authUser: null,
       currentView: 1,
-      views: { gridLayout: 1, listLayout: 2, createRecipe: 3, editRecipe: 4, viewRecipe: 5 },
+      views: { home: 1, shoppingList: 2, createRecipe: 3, editRecipe: 4, viewRecipe: 5 },
+      currentLayout: 1,
+      layouts: { grid: 1, list: 2 },
       selectedRecipe: {},
       recipes: [],
       newRecipe: {
@@ -35,9 +38,11 @@ class RecipePage extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.createRecipe = this.createRecipe.bind(this);
     this.recipeClicked = this.recipeClicked.bind(this);
+    this.homeClicked = this.homeClicked.bind(this);
     this.editRecipe = this.editRecipe.bind(this);
     this.gridLayout = this.gridLayout.bind(this);
     this.listLayout = this.listLayout.bind(this);
+    this.layoutTogglerClicked = this.layoutTogglerClicked.bind(this);
     this.createShoppingListClicked = this.createShoppingListClicked.bind(this);
     this.addShoppingListExtras = this.addShoppingListExtras.bind(this);
     this.logOutClicked = this.logOutClicked.bind(this);
@@ -68,7 +73,7 @@ class RecipePage extends React.Component {
       });
       this.setState((prevState) => ({
         recipes: recipes,
-        currentView: prevState.views.gridLayout
+        currentView: prevState.views.home
       }
       ));
       this.hideLoading();
@@ -77,7 +82,8 @@ class RecipePage extends React.Component {
   getShoppingList(callback) {
     this.showLoading();
     firestore.collection('ShoppingList').where("shoppingListUsed", '==', false).get().then(querySnapshot => {
-      if (querySnapshot.docs.length === 1) {
+      debugger;
+      if (querySnapshot.docs.length > 0) {
         let shoppingList = querySnapshot.docs[0].data();
         this.setState({
           shoppingList: shoppingList
@@ -186,7 +192,7 @@ class RecipePage extends React.Component {
   }
   recipeClicked(recipeId) {
     var selectedRecipe = this.state.recipes.find((recipe) => { return recipe.id === recipeId; });
-    if (this.state.creatingShoppingList) {
+    if (this.state.currentView === this.state.views.shoppingList) {
       let shoppingList = JSON.parse(JSON.stringify(this.state.shoppingList)),
         shoppingListIngredients = shoppingList.shoppingListIngredients,
         ingredients = JSON.parse(JSON.stringify(selectedRecipe.ingredients));;
@@ -213,14 +219,19 @@ class RecipePage extends React.Component {
         });
 
         shoppingList.shoppingListIngredients = [...shoppingListIngredients, ...newItems];
-        this.setState((prevState) => ({
+        this.setState({
           shoppingList: shoppingList
-        }));
+        }, () => {
+          this.saveShoppingList();
+        });
+  
       } else {
         shoppingList.shoppingListIngredients = ingredients;
-        this.setState((prevState) => ({
+        this.setState({
           shoppingList: shoppingList
-        }));
+        }, () => {
+          this.saveShoppingList();
+        });
       }
     }
     else {
@@ -258,10 +269,20 @@ class RecipePage extends React.Component {
       recipes[currentIndex] = editedRecipe;
       this.setState((prevState) => ({
         recipes: recipes,
-        currentView: prevState.views.gridLayout
+        currentView: prevState.views.home
       }
       ));
     }
+  }
+  layoutTogglerClicked() {
+    this.setState((prevState) => ({
+      currentLayout: prevState.currentLayout === prevState.layouts.grid ? prevState.layouts.list : prevState.layouts.grid
+    }));
+  }
+  homeClicked() {
+    this.setState((prevState) => ({
+      currentView: prevState.views.home
+    }));
   }
   gridLayout() {
     this.setState((prevState) => ({
@@ -274,20 +295,9 @@ class RecipePage extends React.Component {
     }));
   }
   createShoppingListClicked() {
-    if (!this.state.creatingShoppingList && !this.state.shoppingList) {
-      this.getShoppingList(() => {
-        this.setState((prev) => ({
-          creatingShoppingList: prev.creatingShoppingList ? false : true
-        }));
-      });
-    } else {
-      this.setState((prev) => ({
-        creatingShoppingList: prev.creatingShoppingList ? false : true
-      }));
-    }
-
-
-
+    this.setState((prev) => ({
+      currentView: this.state.views.shoppingList
+    }));
   }
   addShoppingListExtras(shoppingListExtras) {
     if (shoppingListExtras) {
@@ -302,8 +312,7 @@ class RecipePage extends React.Component {
       return;
     }
   }
-  logOutClicked(e) {
-    e.preventDefault();
+  logOutClicked() {
     auth.signOut();
   }
   componentDidMount() {
@@ -314,6 +323,7 @@ class RecipePage extends React.Component {
       if (authUser) {
         this.setState(() => ({ authUser }));
         this.getRecipes();
+        this.getShoppingList();
       } else {
         this.setState(() => ({ authUser: null }));
       }
@@ -326,9 +336,9 @@ class RecipePage extends React.Component {
       nav = <RecipeNav
         createRecipe={this.createRecipe}
         createShoppingList={this.createShoppingListClicked}
-        gridLayout={this.gridLayout}
-        listLayout={this.listLayout}
-        creatingShoppingList={this.state.creatingShoppingList} />;
+        homeClicked={this.homeClicked}
+        logOutClicked={this.logOutClicked}
+      />;
 
     if (this.state.isLoading) {
       return (<div>
@@ -337,13 +347,14 @@ class RecipePage extends React.Component {
     }
 
     if (this.state.authUser) {
-      if (this.state.currentView === this.state.views.gridLayout || this.state.currentView === this.state.views.listLayout) {
-        recipes = this.state.recipes.map((recipe, index) =>
-          <RecipeItem onClick={this.recipeClicked} recipe={recipe} key={index} />,
-        );
-        content = <div id={this.state.currentView === this.state.views.gridLayout ? 'recipe-book-grid' : 'recipe-book-list'}>
-          {recipes}
-        </div>;
+      debugger;
+      if (this.state.currentView === this.state.views.home) {
+        content = <RecipeBook recipes={this.state.recipes}
+          recipeClicked={this.recipeClicked}
+          currentLayout={this.state.currentLayout}
+          layoutGrid={this.state.layouts.grid}
+          layoutTogglerClicked={this.layoutTogglerClicked}
+        />;
       }
       else if (this.state.currentView === this.state.views.createRecipe) {
         content = <RecipeForm recipe={this.state.newRecipe}
@@ -364,7 +375,7 @@ class RecipePage extends React.Component {
           onDelete={this.ingredientOnDelete}
           onSubmit={this.onSubmit} />;
       }
-      if (this.state.creatingShoppingList && this.state.currentView !== this.state.views.createRecipe) {
+      if (this.state.currentView === this.state.views.shoppingList) {
         wrapper =
           <div>
             {nav}
@@ -381,16 +392,20 @@ class RecipePage extends React.Component {
                 />
               </div>
               <div className="recipe-book-wrapper">
-                {content}
+                <RecipeBook recipes={this.state.recipes}
+                  recipeClicked={this.recipeClicked}
+                  currentLayout={this.state.currentLayout}
+                  layoutGrid={this.state.layouts.grid}
+                  layoutTogglerClicked={this.layoutTogglerClicked}
+                />
               </div>
             </div>
-          </div>
+          </div>;
       } else {
         wrapper =
           <div>
             {nav}
             <div className="main-wrapper"> {content}</div>
-            <button className="recipe-button log-out-button" onClick={this.logOutClicked}>Log Out</button>
           </div>
       }
     } else {

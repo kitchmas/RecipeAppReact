@@ -3,8 +3,8 @@
     }
     
     body {
-        font: 14px "Century Gothic", Futura, sans-serif;
-        background: #E3EEFF;
+        background: #70a1ff;
+        font-family: "Segoe UI", Arial, sans-serif;
         margin: 0;
     }
     
@@ -150,12 +150,11 @@
     .recipe-book-wrapper {
         flex: 4 1 300px;
     }
-    
-    #recipe-book-grid {
+    /* #recipe-book-grid {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-    }
+    } */
     
     #shopping-list {
         background: white;
@@ -355,6 +354,25 @@
         margin-top: 0;
     }
     
+    .layout-toggler {
+        margin: 8px;
+        position: absolute;
+        bottom: 4px;
+        right: 4px;
+        color: black;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 22px;
+        display: none;
+    }
+    
+    .layout-toggler:hover {
+        color: #61DAF9;
+    }
+    
     .max-600 {
         display: none
     }
@@ -431,6 +449,9 @@
         }
         nav {
             font-size: 16px;
+        }
+        .layout-toggler {
+            display: flex;
         }
     }
     /* Large devices (laptops/desktops, 992px and up) */
