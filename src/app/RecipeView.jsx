@@ -18,30 +18,33 @@ class RecipeView extends React.Component {
             </li>
         );
         return (
-            <div class="item-detail">
-                <div class="heading-menu-row">
+            <div className="item-detail">
+                <div className="heading-menu-row">
                     <div>
                         <h2>{this.props.recipe.name}</h2>
                     </div>
-                    <button class="list-menu-button">
+                    <button className="list-menu-button">
                         &#8942;
-                        <div class="settings">
+                        <div className="settings">
                             <ul>
                                 <li onClick={this.editRecipeClicked}>Edit</li>
                             </ul>
                         </div>
                     </button>
                 </div>
-                <div class="main-content">
-                    <div class="description-block">
-                        <p>{this.props.recipe.description}
+                <div className="main-content">
+                <div>
+                {this.props.recipe.imgUrl && <img className="recipe-picture" src={this.props.recipe.imgUrl} />}
+                </div>
+                    <div className="description-block">
+                        <p className="pre">{this.props.recipe.description}
                         </p>
                     </div>
-                    <div class="method-wrapper">
-                        <ul class="list-items">
+                    <div className="method-wrapper">
+                        <ul className="list-items">
                             {ingredients}
                         </ul>
-                        <div class="method">
+                        <div className="method pre">
                             {this.props.recipe.method}
                         </div>
                     </div>

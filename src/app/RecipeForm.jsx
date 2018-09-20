@@ -115,9 +115,9 @@ class RecipeForm extends React.Component {
               onDelete={this.ingredientOnDelete}
             />
         </div>
-        <div>
+        <div className="margin-topper">
            {this.state.isUploading && <p>Progress: {this.state.progress}</p>}
-           {this.state.avatarURL && <img height="200" src={this.state.avatarURL} />}
+           {this.state.avatarURL && <img className="image-uploaded" height="200" src={this.state.avatarURL} />}
         <label style={{backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, pointer: 'cursor'}}>
         Upload a picture
           <FileUploader
