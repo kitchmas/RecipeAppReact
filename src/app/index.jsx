@@ -30,9 +30,11 @@ class RecipePage extends React.Component {
         description: "",
         newIngredientName: "",
         method: "",
-        ingredients: []
+        ingredients: [],
+        imgUrl:""
       },
       creatingShoppingList: false,
+      saveShoppingList:"saved",
       shoppingList: null
     }
     this.onSubmit = this.onSubmit.bind(this);
@@ -47,6 +49,7 @@ class RecipePage extends React.Component {
     this.addShoppingListExtras = this.addShoppingListExtras.bind(this);
     this.logOutClicked = this.logOutClicked.bind(this);
     this.saveShoppingList = this.saveShoppingList.bind(this);
+    this.saveShoppingListClicked = this.saveShoppingListClicked.bind(this);
     this.newShoppingList = this.newShoppingList.bind(this);
     this.deleteShoppingListIngredient = this.deleteShoppingListIngredient.bind(this);
     this.deleteShoppingListExtra = this.deleteShoppingListExtra.bind(this);
@@ -82,7 +85,6 @@ class RecipePage extends React.Component {
   getShoppingList(callback) {
     this.showLoading();
     firestore.collection('ShoppingList').where("shoppingListUsed", '==', false).get().then(querySnapshot => {
-      debugger;
       if (querySnapshot.docs.length > 0) {
         let shoppingList = querySnapshot.docs[0].data();
         this.setState({
@@ -97,7 +99,8 @@ class RecipePage extends React.Component {
       }
     });
   }
-  createNewShoppingList() {
+  createNewShoppingList(callback) {
+    debugger;
     const dateCreated = new Date(),
       id = IdCreator.createAutoId();
     let shoppingList = {
@@ -107,31 +110,50 @@ class RecipePage extends React.Component {
       shoppingListIngredients: [],
       shoppingListExtras: []
     }
-    this.showLoading();
+ 
     firestore.collection('ShoppingList').doc(shoppingList.id).set(shoppingList)
       .then(docRef => {
         console.log("ShoppingListSaved saved successfully");
         this.setState({
           shoppingList: shoppingList
         });
-        this.hideLoading();
+       
       })
       .catch(error => console.log("Error adding document: ", error));
   }
-  saveShoppingList() {
+  saveShoppingList(callback) {
     const shoppingList = this.state.shoppingList;
     if (shoppingList.id) {
       // this.showLoading();
       firestore.collection('ShoppingList').doc(shoppingList.id).set(shoppingList)
         .then(() => {
-          // console.log("ShoppingListSaved saved successfully");
-          // this.getShoppingList();
-          // this.hideLoading();
+     
+         if(callback){
+           callback();
+         }
         })
         .catch(error => console.log("Error adding document: ", error));
     }
+    return "Saved";
   }
-  newShoppingList() {
+  saveShoppingListClicked(callback) {
+    const shoppingList = this.state.shoppingList;
+    if (shoppingList.id) {
+      // this.showLoading();
+      firestore.collection('ShoppingList').doc(shoppingList.id).set(shoppingList)
+        .then(() => {
+          // super lazy way to update the state on the child to refresh
+          // debugger;
+          // this.setState((prevState) => ({
+          //   saveShoppingList: prevState.saveShoppingList === "saved" ? "savedd" : "saved"
+          // }));
+          callback();
+        })
+        .catch(error => console.log("Error adding document: ", error));
+    }
+    return "Saved";
+  }
+  newShoppingList(callback) {
     let confirmResponse = confirm("Are you sure you would like to start a new shopping list?");
     if (confirmResponse) {
       let shoppingList = this.state.shoppingList;
@@ -139,7 +161,12 @@ class RecipePage extends React.Component {
       this.setState({
         shoppingList: shoppingList
       });
-      this.saveShoppingList();
+      this.saveShoppingList(() => {
+        this.createNewShoppingList();
+        if(callback){
+          callback()
+        }
+      });
     } else {
       return;
     }
@@ -262,6 +289,13 @@ class RecipePage extends React.Component {
         .catch(error => console.log("Error adding document: ", error));
 
     } else if (this.state.currentView === this.state.views.editRecipe) {
+
+      firestore.collection('Recipes').doc(recipe.id).set(recipe)
+      .then(docRef => {
+        console.log("Recipe saved successfully");
+      })
+      .catch(error => console.log("Error adding document: ", error));
+
       let editedRecipe = recipe,
         recipes = this.state.recipes.slice(),
         currentIndex = recipes.findIndex((recipe) => { return recipe.id === editedRecipe.id });
@@ -347,7 +381,6 @@ class RecipePage extends React.Component {
     }
 
     if (this.state.authUser) {
-      debugger;
       if (this.state.currentView === this.state.views.home) {
         content = <RecipeBook recipes={this.state.recipes}
           recipeClicked={this.recipeClicked}
@@ -389,6 +422,7 @@ class RecipePage extends React.Component {
                   crossOutShoppingListIngredient={this.crossOutShoppingListIngredient}
                   crossOutShoppingListExtra={this.crossOutShoppingListExtra}
                   createNewShoppingList={this.newShoppingList}
+                  saveShoppingListClicked={this.saveShoppingListClicked}
                 />
               </div>
               <div className="recipe-book-wrapper">

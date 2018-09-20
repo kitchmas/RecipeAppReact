@@ -46,6 +46,7 @@
         .list-wrapper .heading-menu-row h2 {
             margin: 0;
             padding-left: 12px;
+            font-weight: 500;
         }
         
         .list-wrapper .heading-menu-row .list-menu-button {
@@ -103,15 +104,14 @@
         }
         
         .list-wrapper .list-items .circle {
-            height: 20px;
-            width: 20px;
+            height: 10px;
+            width: 10px;
             border-radius: 100px;
             background: #70a1ff;
         }
         
         .list-wrapper .list-items .item {
             flex: 9;
-            font-size: 18px;
             margin-left: 20px;
         }
         

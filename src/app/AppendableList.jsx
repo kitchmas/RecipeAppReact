@@ -14,11 +14,9 @@ class AppendableList extends React.Component {
     this.state = {
       newItemName: "",
       newItemAmount: 0,
-      newItemUnitOfMeasurement: 'g',
-      unitsOfMeasurements: ['g', 'ml', 'l', 'each'],
+      newItemUnitOfMeasurement: ''
     }
     this.addItem = this.addItem.bind(this);
-    this.unitsOfMeasurementChanged = this.unitsOfMeasurementChanged.bind(this);
   }
   addItem(e) {
     var list = this.props.list.length === 0 ? this.props.list : this.props.list.slice();
@@ -28,21 +26,15 @@ class AppendableList extends React.Component {
       {
         newItemName: '',
         newItemAmount: 0,
-        newItemUnitOfMeasurement: 'g'
+        newItemUnitOfMeasurement: ''
       }
     );
     this.props.onClick(list);
   }
-  unitsOfMeasurementChanged(event) {
-    this.setState({ selectedUnit: event.target.value });
-  }
   render() {
     var list = this.props.list.map((item, index) =>
       <ListItem onDelete={this.props.onDelete} key={index} index={index} item={item} />
-    ),
-      unitsOfMeasurement = this.state.unitsOfMeasurements.map((item, index) =>
-        <option key={index} value={item}>{item}</option>
-      );
+    );
     return (
       <div>
         <div>
@@ -66,9 +58,7 @@ class AppendableList extends React.Component {
           <div>
             <label className="recipe-label">
               UoM
-          <select value={this.state.selectedUnit} onChange={this.newItemUnitOfMeasurement}>
-                {unitsOfMeasurement}
-              </select>
+              <input className="recipe-input" name="unitOfMeasure" id="unitOfMeasure" type="text" value={this.state.newItemUnitOfMeasurement} onChange={(event) => this.setState({ newItemUnitOfMeasurement: event.target.value })} />
             </label>
           </div>
           <div className="text-right">

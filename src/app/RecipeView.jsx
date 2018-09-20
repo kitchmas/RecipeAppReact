@@ -5,15 +5,17 @@ import './css/recipeView.css'
 class RecipeView extends React.Component {
     constructor(props) {
         super(props)
+        this.editRecipeClicked = this.editRecipeClicked.bind(this);
+    }
+    editRecipeClicked(){
+        this.props.onClick(this.props.recipe.id)
     }
     render() {
         var ingredients = this.props.recipe.ingredients.map((ingredient, index) =>
-        <li>
-            <div class="circle"></div>
-            <div class="item">{ingredient.name} {ingredient.amount} {ingredient.unitOfMeasurement}</div>
-            <div class="remove-item" 
-            >&#10005;</div>
-        </li>
+            <li>
+                <div class="circle"></div>
+                <div class="item">{ingredient.name} {ingredient.amount} {ingredient.unitOfMeasurement}</div>
+            </li>
         );
         return (
             <div class="item-detail">
@@ -23,8 +25,10 @@ class RecipeView extends React.Component {
                     </div>
                     <button class="list-menu-button">
                         &#8942;
-       <div class="settings">
-                            <button className="recipe-button edit-recipe" onClick={e => this.props.onClick(this.props.recipe.id)}>Edit</button>
+                        <div class="settings">
+                            <ul>
+                                <li onClick={this.editRecipeClicked}>Edit</li>
+                            </ul>
                         </div>
                     </button>
                 </div>
@@ -35,7 +39,7 @@ class RecipeView extends React.Component {
                     </div>
                     <div class="method-wrapper">
                         <ul class="list-items">
-                        {ingredients}
+                            {ingredients}
                         </ul>
                         <div class="method">
                             {this.props.recipe.method}

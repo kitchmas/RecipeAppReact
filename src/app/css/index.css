@@ -293,7 +293,7 @@
     }
     
     #recipe-form .ingredient-flex div:nth-child(3) {
-        flex: 0 0 auto;
+        flex: 0 0 80px;
         padding-right: 8px;
     }
     
@@ -394,6 +394,24 @@
     }
     /* Extra small devices (phones, 600px and down) */
     
+
+.settings ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.settings ul li{
+    font-size: 18px;
+    text-align: left;
+    padding: 8px 12px;
+}
+
+.settings ul li:hover,
+.settings ul li:active {
+    background: #dfe4ea;
+}
+
     @media only screen and (max-width: 600px) {
         .max-600 {
             display: block

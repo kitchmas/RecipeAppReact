@@ -1,17 +1,31 @@
 import React from 'react';
 import { AppendableList } from './AppendableList.jsx';
 import Textarea from "react-textarea-autosize";
+import firebase from "firebase";
+import FileUploader from "react-firebase-file-uploader";
 import './css/index.css';
+import { debug } from 'util';
 
 class RecipeForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       recipe: this.props.recipe,
-      addingIngredient: false
+      addingIngredient: false,
+      avatar: "",
+      isUploading: false,
+      progress: 0,
+      avatarURL: ""
     }
     this.addIngredient = this.addIngredient.bind(this);
     this.ingredientOnDelete = this.ingredientOnDelete.bind(this);
+
+    this.handleChangeUsername = this.handleChangeUsername.bind(this);
+    this.handleUploadStart  = this.handleUploadStart.bind(this);
+    this.handleProgress = this.handleProgress.bind(this);
+    this.handleUploadError = this.handleUploadError.bind(this);
+    this.handleUploadSuccess = this.handleUploadSuccess.bind(this);
+ 
   }
   inputOnChange(event) {
     const target = event.target;
@@ -43,8 +57,36 @@ class RecipeForm extends React.Component {
     this.setState({ recipe: recipe });
   }
   onSubmit(e) {
+    debugger;
     e.preventDefault();
     this.props.onSubmit(this.state.recipe);
+  }
+  handleChangeUsername(event) {
+    this.setState({ username: event.target.value });
+  }
+  handleProgress(progress){ this.setState({ progress });}
+  handleUploadError(error) {
+    this.setState({ isUploading: false });
+    console.error(error);
+  }
+  handleUploadStart(){
+    this.setState({ isUploading: true, progress: 0 });
+  }
+  handleUploadSuccess(filename){
+    this.setState({ avatar: filename, progress: 100, isUploading: false });
+    var recipe = {};
+    Object.assign(recipe, this.state.recipe);
+ 
+    firebase
+      .storage()
+      .ref("images")
+      .child(filename)
+      .getDownloadURL()
+      .then((url) =>{
+        recipe.imgUrl = url;
+        this.setState({ avatarURL: url,
+          recipe:recipe });
+      });
   }
   render() {
     return (
@@ -67,13 +109,29 @@ class RecipeForm extends React.Component {
         </div>
         <div>
               <label className="recipe-label" htmlFor="new-item-name">Ingredients</label>
-          
             <AppendableList
               list={this.state.recipe.ingredients}
               onClick={this.addIngredient}
               onDelete={this.ingredientOnDelete}
             />
-
+        </div>
+        <div>
+           {this.state.isUploading && <p>Progress: {this.state.progress}</p>}
+           {this.state.avatarURL && <img height="200" src={this.state.avatarURL} />}
+        <label style={{backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, pointer: 'cursor'}}>
+        Upload a picture
+          <FileUploader
+            hidden
+            accept="image/*"
+            name="avatar"
+            randomizeFilename
+            storageRef={firebase.storage().ref("images")}
+            onUploadStart={this.handleUploadStart}
+            onUploadError={this.handleUploadError}
+            onUploadSuccess={this.handleUploadSuccess}
+            onProgress={this.handleProgress}
+          />
+          </label>
         </div>
         <div className="text-right">
           <button className="recipe-button recipe-save-button" onClick={e => this.onSubmit(e)}>Save</button>

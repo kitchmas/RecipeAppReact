@@ -1,4 +1,6 @@
 import React from 'react';
+
+
 import './css/index.css'
 import './css/shoppingList.css'
 
@@ -7,11 +9,17 @@ class ShoppingList extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            newItem: ""
+            newItem: "",
+            saveShoppingList:"Save",
+            newShoppingList:"New",
+            deleteShoppingList:"Delete",
         }
         this.addItemClicked = this.addItemClicked.bind(this);
         this.onShoppingListIngredientDeleteClicked = this.onShoppingListIngredientDeleteClicked.bind(this);
         this.onShoppingListExtraDeleteClicked = this.onShoppingListExtraDeleteClicked.bind(this);
+        this.saveShoppingListClicked = this.saveShoppingListClicked.bind(this);
+        this.deleteShoppingListClicked = this.deleteShoppingListClicked.bind(this);
+        this.newShoppingListClicked = this.newShoppingListClicked.bind(this);
     }
     addItemClicked(e) {
         var list = this.props.shoppingListExtras.length === 0 ? this.props.shoppingListExtras : this.props.shoppingListExtras.slice();
@@ -36,6 +44,37 @@ class ShoppingList extends React.Component {
     }
     onDelete(e) {
         this.props.onDelete(e.target.attributes.getNamedItem("data-index").value);
+    }
+    saveShoppingListClicked(){
+        this.setState((prevState) => ({
+            saveShoppingList: "Saving..."
+          }));
+      var x =  this.props.saveShoppingListClicked(() => {
+        this.setState((prevState) => ({
+            saveShoppingList: "Save"
+          }));
+      }
+    );
+    }
+    newShoppingListClicked(){
+        this.setState((prevState) => ({
+            newShoppingList: "Creating..."
+          }));
+        this.props.createNewShoppingList(() => {
+            this.setState((prevState) => ({
+                newShoppingList: "New"
+              }));
+        });
+    }
+    deleteShoppingListClicked(){
+        this.setState((prevState) => ({
+            deleteShoppingList: "Deleting..."
+          }));
+        this.props.createNewShoppingList(() => {
+            this.setState((prevState) => ({
+                deleteShoppingList: "Delete"
+              }));
+        });
     }
     render() {
         var shoppingList = this.props.shoppingList.map((item, index) =>
@@ -67,7 +106,13 @@ class ShoppingList extends React.Component {
                     </div>
                     <button class="list-menu-button">
                         &#8942;
-                <div class="settings"></div>
+                    <div class="settings">
+                            <ul>
+                                <li onClick={this.saveShoppingListClicked}>{this.state.saveShoppingList}</li>
+                                <li onClick={this.newShoppingListClicked}>{this.state.newShoppingList}</li>
+                                <li onClick={this.deleteShoppingListClicked}>{this.state.deleteShoppingList}</li>
+                            </ul>
+                        </div>
                     </button>
                 </div>
                 <ul class="list-items">
