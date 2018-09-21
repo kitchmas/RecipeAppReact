@@ -6,22 +6,15 @@ import './css/recipeBook.css';
 class RecipeBook extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      toggleIcon: "grid"
-    }
     this.recipeClicked = this.recipeClicked.bind(this);
-    this.layoutTogglerClicked = this.layoutTogglerClicked.bind(this);
   }
   recipeClicked(recipeId) {
     this.props.recipeClicked(recipeId);
   }
-  layoutTogglerClicked() {
-    this.setState({ toggleIcon: "hi" });
-    this.props.layoutTogglerClicked();
-  }
+
   render() {
     let recipes = this.props.recipes.map((recipe, index) =>
-      <RecipeItem onClick={this.recipeClicked} recipe={recipe} key={index} />,
+      <RecipeItem isShoppingList={this.props.isShoppingList} onClick={this.recipeClicked} recipe={recipe} key={index} />,
     );
       return (
         <div className="recipe-book-grid recipe-book">

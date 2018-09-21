@@ -43,7 +43,6 @@ class RecipeNav extends React.Component {
             selectedButton: prev.buttons.createShoppingList
         }));
         this.props.createShoppingList();
-        debugger;
     }
     homeClicked() {
         this.setState((prev) => ({

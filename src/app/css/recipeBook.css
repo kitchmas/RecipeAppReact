@@ -27,6 +27,12 @@
      font-size: 64px;
      display: none;
  }
+
+ .item .detail-wrapper .fa-plus {
+    flex: 10;
+    font-size: 64px;
+    display: none;
+ }
  
  .item .detail-wrapper:hover {
      background-color: rgb(220, 220, 220, 0.5);
@@ -37,6 +43,11 @@
      display: flex;
      color: rgb(0, 0, 0, 0.5);
  }
+
+ .item .detail-wrapper:hover .fa-plus {
+    display: flex;
+    color: rgb(0, 0, 0, 0.5);
+}
  
  .recipe-book .item .item-picture {
      object-fit: cover;

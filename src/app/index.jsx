@@ -12,6 +12,7 @@ import { RecipeBook } from './RecipeBook.jsx';
 import { ShoppingList } from './ShoppingList.jsx';
 import { Login } from './login.jsx';
 import Textarea from "react-textarea-autosize";
+import './css/modal.css';
 
 class RecipePage extends React.Component {
   constructor(props) {
@@ -31,17 +32,20 @@ class RecipePage extends React.Component {
         newIngredientName: "",
         method: "",
         ingredients: [],
-        imgUrl:""
+        imgUrl: ""
       },
       creatingShoppingList: false,
-      saveShoppingList:"saved",
+      saveShoppingList: "saved",
       shoppingList: null
     }
     this.onSubmit = this.onSubmit.bind(this);
     this.createRecipe = this.createRecipe.bind(this);
     this.recipeClicked = this.recipeClicked.bind(this);
+    this.modalWrapperClicked = this.modalWrapperClicked.bind(this);
+    this.modalWrapperFromFormClicked = this.modalWrapperFromFormClicked.bind(this);
     this.homeClicked = this.homeClicked.bind(this);
     this.editRecipe = this.editRecipe.bind(this);
+    this.deleteRecipe = this.deleteRecipe.bind(this);
     this.gridLayout = this.gridLayout.bind(this);
     this.listLayout = this.listLayout.bind(this);
     this.layoutTogglerClicked = this.layoutTogglerClicked.bind(this);
@@ -67,7 +71,7 @@ class RecipePage extends React.Component {
     });
   }
   getRecipes() {
-    this.showLoading();
+    // this.showLoading();
     firestore.collection('Recipes').get().then(querySnapshot => {
       let recipes = querySnapshot.docs.map(doc => {
         let recipe = doc.data();
@@ -83,7 +87,7 @@ class RecipePage extends React.Component {
     });
   }
   getShoppingList(callback) {
-    this.showLoading();
+    // this.showLoading();
     firestore.collection('ShoppingList').where("shoppingListUsed", '==', false).get().then(querySnapshot => {
       if (querySnapshot.docs.length > 0) {
         let shoppingList = querySnapshot.docs[0].data();
@@ -100,7 +104,6 @@ class RecipePage extends React.Component {
     });
   }
   createNewShoppingList(callback) {
-    debugger;
     const dateCreated = new Date(),
       id = IdCreator.createAutoId();
     let shoppingList = {
@@ -110,14 +113,14 @@ class RecipePage extends React.Component {
       shoppingListIngredients: [],
       shoppingListExtras: []
     }
- 
+
     firestore.collection('ShoppingList').doc(shoppingList.id).set(shoppingList)
       .then(docRef => {
         console.log("ShoppingListSaved saved successfully");
         this.setState({
           shoppingList: shoppingList
         });
-       
+
       })
       .catch(error => console.log("Error adding document: ", error));
   }
@@ -127,10 +130,10 @@ class RecipePage extends React.Component {
       // this.showLoading();
       firestore.collection('ShoppingList').doc(shoppingList.id).set(shoppingList)
         .then(() => {
-     
-         if(callback){
-           callback();
-         }
+
+          if (callback) {
+            callback();
+          }
         })
         .catch(error => console.log("Error adding document: ", error));
     }
@@ -163,7 +166,7 @@ class RecipePage extends React.Component {
       });
       this.saveShoppingList(() => {
         this.createNewShoppingList();
-        if(callback){
+        if (callback) {
           callback()
         }
       });
@@ -251,7 +254,7 @@ class RecipePage extends React.Component {
         }, () => {
           this.saveShoppingList();
         });
-  
+
       } else {
         shoppingList.shoppingListIngredients = ingredients;
         this.setState({
@@ -275,15 +278,23 @@ class RecipePage extends React.Component {
       selectedRecipe: selectedRecipe
     }));
   }
+  deleteRecipe(recipeId) {
+    firestore.collection('Recipes').doc(recipeId).delete()
+      .then(docRef => {
+        console.log("Recipe deleted successfully");
+        this.getRecipes();
+      })
+      .catch(error => console.log("Error deleting document: ", error));
+  }
   onSubmit(recipe) {
     if (this.state.currentView === this.state.views.createRecipe) {
       let newRecipe = recipe,
         recipes = this.state.recipes.slice();
-      this.showLoading();
+      // this.showLoading();
       firestore.collection('Recipes').doc().set(recipe)
         .then(docRef => {
           console.log("Recipe saved successfully");
-          this.showLoading();
+          // this.showLoading();
           this.getRecipes();
         })
         .catch(error => console.log("Error adding document: ", error));
@@ -291,10 +302,10 @@ class RecipePage extends React.Component {
     } else if (this.state.currentView === this.state.views.editRecipe) {
 
       firestore.collection('Recipes').doc(recipe.id).set(recipe)
-      .then(docRef => {
-        console.log("Recipe saved successfully");
-      })
-      .catch(error => console.log("Error adding document: ", error));
+        .then(docRef => {
+          console.log("Recipe saved successfully");
+        })
+        .catch(error => console.log("Error adding document: ", error));
 
       let editedRecipe = recipe,
         recipes = this.state.recipes.slice(),
@@ -312,6 +323,23 @@ class RecipePage extends React.Component {
     this.setState((prevState) => ({
       currentLayout: prevState.currentLayout === prevState.layouts.grid ? prevState.layouts.list : prevState.layouts.grid
     }));
+  }
+  modalWrapperFromFormClicked(event) {
+    if (event.target.className == "modal-wrapper") {
+      let x = confirm("Are you sure you want to stop editing the recipe? Any unsaved changes will be lost");
+      if (x) {
+        this.setState((prevState) => ({
+          currentView: prevState.views.home
+        }));
+      }
+    }
+  }
+  modalWrapperClicked(event) {
+    if (event.target.className == "modal-wrapper") {
+      this.setState((prevState) => ({
+        currentView: prevState.views.home
+      }));
+    }
   }
   homeClicked() {
     this.setState((prevState) => ({
@@ -382,66 +410,101 @@ class RecipePage extends React.Component {
 
     if (this.state.authUser) {
       if (this.state.currentView === this.state.views.home) {
-        content = <RecipeBook recipes={this.state.recipes}
-          recipeClicked={this.recipeClicked}
-          currentLayout={this.state.currentLayout}
-          layoutGrid={this.state.layouts.grid}
-          layoutTogglerClicked={this.layoutTogglerClicked}
-        />;
+
+        content =
+          <RecipeBook recipes={this.state.recipes}
+            recipeClicked={this.recipeClicked}
+            currentLayout={this.state.currentLayout}
+            layoutGrid={this.state.layouts.grid}
+            layoutTogglerClicked={this.layoutTogglerClicked}
+          />;
       }
       else if (this.state.currentView === this.state.views.createRecipe) {
-        content = <RecipeForm recipe={this.state.newRecipe}
-          // newIngredientName={this.state.newIngredientName}
-          onChange={this.handleInputChanged}
-          onClick={this.addIngredient}
-          onDelete={this.ingredientOnDelete}
-          onSubmit={this.onSubmit} />;
+        content =
+          <div>
+            <div class="modal-wrapper" onClick={this.modalWrapperFromFormClicked}>
+              <RecipeForm recipe={this.state.newRecipe}
+                // newIngredientName={this.state.newIngredientName}
+                onChange={this.handleInputChanged}
+                onClick={this.addIngredient}
+                onDelete={this.ingredientOnDelete}
+                onSubmit={this.onSubmit} />
+            </div>
+            <RecipeBook recipes={this.state.recipes}
+              recipeClicked={this.recipeClicked}
+              currentLayout={this.state.currentLayout}
+              layoutGrid={this.state.layouts.grid}
+              layoutTogglerClicked={this.layoutTogglerClicked}
+            />
+          </div>;
       }
       else if (this.state.currentView === this.state.views.viewRecipe) {
-        content = <RecipeView recipe={this.state.selectedRecipe} onClick={this.editRecipe} />;
+        content =
+          <div>
+            <div class="modal-wrapper" onClick={this.modalWrapperClicked}>
+              <RecipeView recipe={this.state.selectedRecipe} onEditClicked={this.editRecipe} onDeleteClicked={this.deleteRecipe} />
+            </div>
+            <RecipeBook recipes={this.state.recipes}
+              recipeClicked={this.recipeClicked}
+              currentLayout={this.state.currentLayout}
+              layoutGrid={this.state.layouts.grid}
+              layoutTogglerClicked={this.layoutTogglerClicked}
+            />
+          </div>;
       }
       else if (this.state.currentView === this.state.views.editRecipe) {
-        content = <RecipeForm recipe={this.state.selectedRecipe}
-          newIngredientName={this.state.newIngredientName}
-          onChange={this.handleInputChanged}
-          onClick={this.addIngredient}
-          onDelete={this.ingredientOnDelete}
-          onSubmit={this.onSubmit} />;
-      }
-      if (this.state.currentView === this.state.views.shoppingList) {
-        wrapper =
+        content =
           <div>
-            {nav}
-            <div className="main-flex-wrapper">
-              <div className="shopping-wrapper">
-                <ShoppingList shoppingList={this.state.shoppingList.shoppingListIngredients}
-                  shoppingListExtras={this.state.shoppingList.shoppingListExtras}
-                  onClick={this.addShoppingListExtras}
-                  deleteShoppingListIngredient={this.deleteShoppingListIngredient}
-                  deleteShoppingListExtra={this.deleteShoppingListExtra}
-                  crossOutShoppingListIngredient={this.crossOutShoppingListIngredient}
-                  crossOutShoppingListExtra={this.crossOutShoppingListExtra}
-                  createNewShoppingList={this.newShoppingList}
-                  saveShoppingListClicked={this.saveShoppingListClicked}
-                />
-              </div>
-              <div className="recipe-book-wrapper">
-                <RecipeBook recipes={this.state.recipes}
-                  recipeClicked={this.recipeClicked}
-                  currentLayout={this.state.currentLayout}
-                  layoutGrid={this.state.layouts.grid}
-                  layoutTogglerClicked={this.layoutTogglerClicked}
-                />
-              </div>
+            <div class="modal-wrapper" onClick={this.modalWrapperFromFormClicked}>
+              <RecipeForm
+                isEdit={true}
+                onDeleteClicked={this.deleteRecipe}
+                recipe={this.state.selectedRecipe}
+                newIngredientName={this.state.newIngredientName}
+                onChange={this.handleInputChanged}
+                onClick={this.addIngredient}
+                onDelete={this.ingredientOnDelete}
+                onSubmit={this.onSubmit}
+                onDeleteRecipe={this.deleteRecipe} />;
+             </div>
+            <RecipeBook recipes={this.state.recipes}
+              recipeClicked={this.recipeClicked}
+              currentLayout={this.state.currentLayout}
+              layoutGrid={this.state.layouts.grid}
+              layoutTogglerClicked={this.layoutTogglerClicked}
+            />
+          </div>;
+      }
+      else if (this.state.currentView === this.state.views.shoppingList) {
+        content =
+          <div className="main-flex-wrapper">
+            <div className="shopping-wrapper">
+              <ShoppingList shoppingList={this.state.shoppingList.shoppingListIngredients}
+                shoppingListExtras={this.state.shoppingList.shoppingListExtras}
+                onClick={this.addShoppingListExtras}
+                deleteShoppingListIngredient={this.deleteShoppingListIngredient}
+                deleteShoppingListExtra={this.deleteShoppingListExtra}
+                crossOutShoppingListIngredient={this.crossOutShoppingListIngredient}
+                crossOutShoppingListExtra={this.crossOutShoppingListExtra}
+                createNewShoppingList={this.newShoppingList}
+                saveShoppingListClicked={this.saveShoppingListClicked}
+              />
+            </div>
+            <div className="recipe-book-wrapper">
+              <RecipeBook isShoppingList={true} recipes={this.state.recipes}
+                recipeClicked={this.recipeClicked}
+                currentLayout={this.state.currentLayout}
+                layoutGrid={this.state.layouts.grid}
+                layoutTogglerClicked={this.layoutTogglerClicked}
+              />
             </div>
           </div>;
-      } else {
-        wrapper =
-          <div>
-            {nav}
-            <div className="main-wrapper"> {content}</div>
-          </div>
       }
+      wrapper =
+        <div>
+          {nav}
+          <div className="main-wrapper"> {content}</div>
+        </div>
     } else {
       wrapper =
         <div>

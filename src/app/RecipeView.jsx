@@ -6,9 +6,18 @@ class RecipeView extends React.Component {
     constructor(props) {
         super(props)
         this.editRecipeClicked = this.editRecipeClicked.bind(this);
+        this.deleteRecipeClicked = this.deleteRecipeClicked.bind(this);
+        this.state = {delete:"Delete"}
     }
     editRecipeClicked(){
-        this.props.onClick(this.props.recipe.id)
+        this.props.onEditClicked(this.props.recipe.id)
+    }
+    deleteRecipeClicked(){
+      var x = confirm("Are you sure you want to delete this recipe?");
+      if(x){
+        this.setState({ delete:"Deleting..." });
+        this.props.onDeleteClicked(this.props.recipe.id)
+      };
     }
     render() {
         var ingredients = this.props.recipe.ingredients.map((ingredient, index) =>
@@ -28,6 +37,7 @@ class RecipeView extends React.Component {
                         <div className="settings">
                             <ul>
                                 <li onClick={this.editRecipeClicked}>Edit</li>
+                                <li onClick={this.deleteRecipeClicked}>{this.state.delete}</li>
                             </ul>
                         </div>
                     </button>

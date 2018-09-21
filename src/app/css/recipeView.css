@@ -2,11 +2,10 @@
     display: flex;
     flex-direction: column;
     width: 80%;
-    max-width: 600px;
+    max-width: 1000px;
     margin: 0 auto;
     background: #ffffff;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-    margin-top: 80px;
 }
 
 .item-detail .heading-menu-row {
@@ -82,6 +81,8 @@
 .item-detail .description-block p {
     margin: 0;
     margin-bottom: 22px;
+    font-weight: 500;
+    font-size: 18px;
 }
 
 .item-detail .method-wrapper {
@@ -90,10 +91,11 @@
 
 .item-detail .method-wrapper .method {
     flex: 3;
+    padding-left: 8px;
 }
 
 .item-detail .pre {
-    white-space: pre;
+    white-space: pre-wrap; 
 }
 
 .item-detail .list-items {
@@ -115,6 +117,7 @@
     width: 10px;
     border-radius: 100px;
     background: #70a1ff;
+    padding: 6px;
 }
 
 .item-detail .list-items .item {
@@ -126,4 +129,12 @@
     width: 100%;
     object-fit: cover;
     height: 196px;
+    margin-bottom: 12px;
+}
+
+
+@media (max-width: 576px) {
+    .item-detail {
+        width:90%;
+    }
 }
